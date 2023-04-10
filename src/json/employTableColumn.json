@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "fullName",
+    "label": "Full Name"
+  },
+  {
+    "_id": "email",
+    "label": "Email"
+  },
+  {
+    "_id": "address",
+    "label": "Address"
+  },
+  {
+    "_id": "phone",
+    "label": "Phone"
+  },
+  {
+    "_id": "actions",
+    "label": "Action"
+  }
+]
