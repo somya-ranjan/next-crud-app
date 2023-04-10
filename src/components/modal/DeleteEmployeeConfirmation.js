@@ -9,8 +9,8 @@ function DeleteEmployeeConfirmation(props) {
   return (
     <CustomModal open={open} setOpen={setOpen} modalTitle="Delete Employee">
       <Box>
-        <Typography variant="h5" textAlign="center" mt={1} mb={3}>
-          Are you sure delete this employee?
+        <Typography variant="h6" textAlign="center" mt={1} mb={3}>
+          Are you sure you want to delete this employee?
         </Typography>
         <Box textAlign="center">
           <Button

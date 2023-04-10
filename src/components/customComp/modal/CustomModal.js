@@ -1,4 +1,11 @@
-import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 function CustomModal(props) {
@@ -33,26 +40,47 @@ function CustomModal(props) {
           },
         }}
         aria-describedby="alert-dialog-slide-description">
-        <DialogTitle
+        <Box
           sx={{
-            color: "#000",
-            fontSize: "22px",
-            margin: "auto",
-            fontWeight: "bold",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            px: 2,
+            py: 1,
+            borderBottom: "2px solid black",
           }}>
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
+          <DialogTitle
             sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
+              color: "#000",
+              fontSize: "22px",
+              fontWeight: "bold",
+              p: 0,
+              m: 0,
             }}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <DialogTitle
+            {modalTitle}
+          </DialogTitle>
+          <DialogTitle
+            sx={{
+              color: "#000",
+              fontSize: "22px",
+              fontWeight: "bold",
+              p: 0,
+              m: 0,
+            }}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              // sx={{
+              //   position: "absolute",
+              //   right: 8,
+              //   top: 8,
+              // }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+        </Box>
+        {/* <DialogTitle
           sx={{
             color: "#000",
             fontSize: "22px",
@@ -61,7 +89,8 @@ function CustomModal(props) {
             pb: 0,
           }}>
           {modalTitle}
-        </DialogTitle>
+        </DialogTitle>  */}
+
         <DialogContent>{children}</DialogContent>
       </Dialog>
     </>
