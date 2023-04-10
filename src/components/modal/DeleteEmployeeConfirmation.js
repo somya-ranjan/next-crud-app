@@ -3,8 +3,8 @@ import CustomModal from "../customComp/modal/CustomModal";
 import { Box, Button, Typography } from "@mui/material";
 
 function DeleteEmployeeConfirmation(props) {
-  const { open, setOpen } = props;
-  console.log(open);
+  const { open, setOpen, employeeData } = props;
+  console.log(employeeData);
 
   return (
     <CustomModal open={open} setOpen={setOpen} modalTitle="Delete Employee">
@@ -25,7 +25,7 @@ function DeleteEmployeeConfirmation(props) {
             onClick={() => setOpen(false)}>
             No
           </Button>
-          <Button type="submit" variant="contained">
+          <Button type="submit" variant="contained" color="error">
             Yes
           </Button>
         </Box>

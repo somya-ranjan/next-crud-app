@@ -11,6 +11,9 @@ import DeleteEmployeeConfirmation from "@/components/modal/DeleteEmployeeConfirm
 export default function Home() {
   // // local state
   const [openModal, setOpenModal] = useState(false);
+  const [currentEmployeeData, setCurrentEmployeeData] = useState("");
+
+  // // demo data for table row
   const demo = [
     {
       _id: 1,
@@ -23,12 +26,12 @@ export default function Home() {
 
   // // function
   const handelEdit = (data) => {
-    console.log(data);
     setOpenModal("edit");
+    setCurrentEmployeeData(data);
   };
   const handelDelete = (data) => {
-    console.log(data);
     setOpenModal("delete");
+    setCurrentEmployeeData(data);
   };
 
   // // insert icon and data
@@ -55,10 +58,15 @@ export default function Home() {
       <Box mx="auto" maxWidth="1000px">
         <DynamicTable columns={employTableColumn} rows={rows} loading={false} />
       </Box>
-      <AddEmployModal open={openModal} setOpen={setOpenModal} />
+      <AddEmployModal
+        open={openModal}
+        setOpen={setOpenModal}
+        employeeData={currentEmployeeData}
+      />
       <DeleteEmployeeConfirmation
         open={openModal === "delete"}
         setOpen={setOpenModal}
+        employeeData={currentEmployeeData}
       />
     </Layouts>
   );

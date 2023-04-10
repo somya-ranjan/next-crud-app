@@ -14,17 +14,21 @@ function CustomModal(props) {
       <Dialog
         open={open}
         keepMounted
-        onClose={handleClose}
+        // onClose={handleClose}
         sx={{
           zIndex: "1300",
           margin: "auto",
           "& .MuiPaper-root": {
             width: {
-              xs: "60%",
-              sm: "60%",
-              md: "40%",
+              xs: "95%",
+              sm: "70%",
+              md: "45%",
               lg: "40%",
               xl: "30%",
+            },
+            margin: {
+              xs: 0,
+              sm: "32",
             },
           },
         }}
