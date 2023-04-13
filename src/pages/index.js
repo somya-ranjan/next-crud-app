@@ -57,7 +57,11 @@ export default function Home() {
     <Layouts title="Next Crud App">
       <Header setOpenModal={setOpenModal} />
       <Box mx="auto" maxWidth="1000px">
-        <DynamicTable columns={employTableColumn} rows={rows} loading={false} />
+        <DynamicTable
+          columns={employTableColumn}
+          rows={rows}
+          loading={isLoading}
+        />
       </Box>
       <AddEditEmployModal
         open={openModal}
