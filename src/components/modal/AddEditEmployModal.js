@@ -1,38 +1,92 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CustomModal from "../customComp/modal/CustomModal";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { useFormik } from "formik";
 import { addEditEmployeeValidation } from "@/validation/addEditEmployee";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createEmployeeAction,
+  editEmployeeAction,
+  getAllEmployeeAction,
+} from "@/store/sagaActions";
 
 function AddEditEmployModal(props) {
   const { open, setOpen, employeeData } = props;
-  console.log(employeeData);
+
+  // // initial state
+  const dispatch = useDispatch();
+
+  // // Redux state
+  const { isLoading } = useSelector((state) => state?.employee?.createEmployee);
+  const editIsLoading = useSelector(
+    (state) => state?.employee?.editEmployeeReducer?.isLoading
+  );
+
+  // // local state
+  const [previousEmployeeData, setPreviousEmployeeData] = useState();
+  const [isFormEditable, setIsFormEditable] = useState();
+
+  // // function
+  const onSuccess = () => {
+    dispatch(getAllEmployeeAction());
+    setOpen(false);
+  };
+
+  const filterObject = (data) => {
+    let newObj = Object.keys(data)
+      .filter((key) => key !== "_id" && key !== "__v")
+      .reduce((acc, key) => {
+        acc[key] = data[key];
+        return acc;
+      }, {});
+
+    setPreviousEmployeeData(newObj);
+  };
 
   // // validation
   const formik = useFormik({
     enableReinitialize: true,
     validationSchema: addEditEmployeeValidation,
     initialValues: {
-      fullName:
-        open === "add" ? "" : open === "edit" ? employeeData.fullName : "",
+      name: open === "add" ? "" : open === "edit" ? employeeData.name : "",
       email: open === "add" ? "" : open === "edit" ? employeeData.email : "",
-      address:
-        open === "add" ? "" : open === "edit" ? employeeData.address : "",
-      phone: open === "add" ? "" : open === "edit" ? employeeData.phone : "",
+      designation:
+        open === "add" ? "" : open === "edit" ? employeeData.designation : "",
+      phoneNumber:
+        open === "add" ? "" : open === "edit" ? employeeData.phoneNumber : "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      if (open === "add") {
+        dispatch(createEmployeeAction({ values, onSuccess }));
+      } else {
+        dispatch(
+          editEmployeeAction({ values, id: employeeData?._id, onSuccess })
+        );
+      }
     },
   });
 
   // // // Reset form when modal close
   useEffect(() => {
-    if (open === "add" || open === "edit") {
+    if (!open) {
       formik.resetForm();
     }
+    if (open === "edit") {
+      filterObject(employeeData);
+    }
   }, [open]);
+
+  // // checking previous value and current value
+  useEffect(() => {
+    if (open) {
+      setIsFormEditable(
+        JSON.stringify(formik.values) === JSON.stringify(previousEmployeeData)
+      );
+    }
+  }, [formik.values]);
 
   return (
     <CustomModal
@@ -52,15 +106,13 @@ function AddEditEmployModal(props) {
             placeholder="Full Name"
             size="small"
             type="text"
-            name="fullName"
-            value={formik.values.fullName}
+            name="name"
+            value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.fullName && formik.errors.fullName}
+            error={formik.touched.name && formik.errors.name}
             helperText={
-              formik.touched.fullName &&
-              formik.errors.fullName &&
-              formik.errors.fullName
+              formik.touched.name && formik.errors.name && formik.errors.name
             }
           />
         </Box>
@@ -86,25 +138,23 @@ function AddEditEmployModal(props) {
         </Box>
         <Box mb={1}>
           <Typography variant="subtitle1">
-            Address <sup style={{ color: "red" }}>*</sup>
+            Designation <sup style={{ color: "red" }}>*</sup>
           </Typography>
           <TextField
             variant="outlined"
             fullWidth
-            placeholder="Address"
-            name="address"
+            placeholder="Designation"
+            size="small"
+            name="designation"
             type="text"
-            multiline
-            rows={2}
-            padding="0"
-            value={formik.values.address}
+            value={formik.values.designation}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.address && formik.errors.address}
+            error={formik.touched.designation && formik.errors.designation}
             helperText={
-              formik.touched.address &&
-              formik.errors.address &&
-              formik.errors.address
+              formik.touched.designation &&
+              formik.errors.designation &&
+              formik.errors.designation
             }
           />
         </Box>
@@ -116,15 +166,17 @@ function AddEditEmployModal(props) {
             variant="outlined"
             fullWidth
             placeholder="Phone"
-            name="phone"
+            name="phoneNumber"
             size="small"
-            type="text"
-            value={formik.values.phone}
+            type="number"
+            value={formik.values.phoneNumber}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.phone && formik.errors.phone}
+            error={formik.touched.phoneNumber && formik.errors.phoneNumber}
             helperText={
-              formik.touched.phone && formik.errors.phone && formik.errors.phone
+              formik.touched.phoneNumber &&
+              formik.errors.phoneNumber &&
+              formik.errors.phoneNumber
             }
           />
         </Box>
@@ -142,9 +194,14 @@ function AddEditEmployModal(props) {
             onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button startIcon={<DoneIcon />} type="submit" variant="contained">
+          <LoadingButton
+            disabled={isFormEditable}
+            loading={isLoading || editIsLoading}
+            startIcon={<DoneIcon />}
+            type="submit"
+            variant="contained">
             Submit
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </CustomModal>

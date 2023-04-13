@@ -1,10 +1,31 @@
 import React from "react";
 import CustomModal from "../customComp/modal/CustomModal";
 import { Box, Button, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteEmployeeAction,
+  getAllEmployeeAction,
+} from "@/store/sagaActions";
+import { LoadingButton } from "@mui/lab";
 
 function DeleteEmployeeConfirmation(props) {
   const { open, setOpen, employeeData } = props;
-  console.log(employeeData);
+
+  // // initial state
+  const dispatch = useDispatch();
+
+  // // Redux state
+  const { isLoading } = useSelector((state) => state?.employee?.deleteEmployee);
+
+  // // function
+  const onSuccess = () => {
+    dispatch(getAllEmployeeAction());
+    setOpen(false);
+  };
+
+  const handelDelete = () => {
+    dispatch(deleteEmployeeAction({ id: employeeData?._id, onSuccess }));
+  };
 
   return (
     <CustomModal open={open} setOpen={setOpen} modalTitle="Delete Employee">
@@ -25,9 +46,14 @@ function DeleteEmployeeConfirmation(props) {
             onClick={() => setOpen(false)}>
             No
           </Button>
-          <Button type="submit" variant="contained" color="error">
+          <LoadingButton
+            loading={isLoading}
+            type="submit"
+            variant="contained"
+            color="error"
+            onClick={handelDelete}>
             Yes
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </CustomModal>

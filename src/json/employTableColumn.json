@@ -1,6 +1,6 @@
 [
   {
-    "_id": "fullName",
+    "_id": "name",
     "label": "Full Name"
   },
   {
@@ -8,11 +8,11 @@
     "label": "Email"
   },
   {
-    "_id": "address",
-    "label": "Address"
+    "_id": "designation",
+    "label": "Designation"
   },
   {
-    "_id": "phone",
+    "_id": "phoneNumber",
     "label": "Phone"
   },
   {

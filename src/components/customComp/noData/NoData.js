@@ -12,7 +12,7 @@ function NoData({ noDataMsg }) {
         transform: "translate(-50%,-50%)",
         textAlign: "center",
       }}>
-      <Image src={noDataIcon} height={100} />
+      <Image src={noDataIcon} height={100} alt="no data" />
       <Box>{noDataMsg}</Box>
     </Box>
   );

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import SpinnerLoader from "../loader/SpinnerLoader";
 import NoData from "../noData/NoData";
+import { nanoid } from "nanoid";
 import dynamic from "next/dynamic";
 
 function DynamicTable({ columns, rows, loading, noDataMsg }) {
@@ -25,7 +26,7 @@ function DynamicTable({ columns, rows, loading, noDataMsg }) {
             <TableRow>
               {columns.map((column) => (
                 <TableCell
-                  key={column._id}
+                  key={nanoid()}
                   sx={{ fontWeight: 700, fontSize: 17, textAlign: "center" }}>
                   {column.label}
                 </TableCell>
@@ -39,14 +40,14 @@ function DynamicTable({ columns, rows, loading, noDataMsg }) {
               {rows?.length === 0 || rows === undefined ? (
                 <NoData noDataMsg={noDataMsg} />
               ) : (
-                rows?.map((row, i) => {
+                rows?.map((row) => {
                   return (
-                    <TableRow hover key={i}>
+                    <TableRow hover key={nanoid()}>
                       {columns.map((column) => {
                         const value = row[column._id];
                         return (
                           <TableCell
-                            key={column._id}
+                            key={nanoid()}
                             sx={{ textAlign: "center" }}>
                             {value || "----"}
                           </TableCell>

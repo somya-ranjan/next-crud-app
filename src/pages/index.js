@@ -1,28 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Layouts from "../layouts/Layouts";
 import { Box } from "@mui/material";
 import DynamicTable from "@/components/customComp/table/DynamicTable";
 import employTableColumn from "@/json/employTableColumn";
 import Actions from "@/components/customComp/action/Actions";
-import AddEmployModal from "@/components/modal/AddEditEmployModal";
+import AddEditEmployModal from "@/components/modal/AddEditEmployModal";
 import DeleteEmployeeConfirmation from "@/components/modal/DeleteEmployeeConfirmation";
+import { getAllEmployeeAction } from "@/store/sagaActions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
+  // // initial state
+  const dispatch = useDispatch();
+
+  // // Redux state
+  const { allEmployeeList, isLoading } = useSelector(
+    (state) => state?.employee?.employeeList
+  );
+
   // // local state
   const [openModal, setOpenModal] = useState(false);
   const [currentEmployeeData, setCurrentEmployeeData] = useState("");
-
-  // // demo data for table row
-  const demo = [
-    {
-      _id: 1,
-      fullName: "Somyaranjan",
-      email: "somya@text.com",
-      address: "at:bh,po:ann,dist:js pur",
-      phone: "9090909",
-    },
-  ];
 
   // // function
   const handelEdit = (data) => {
@@ -36,10 +35,9 @@ export default function Home() {
 
   // // insert icon and data
   let rows = [];
-  rows = demo?.map((item, index) => {
+  rows = allEmployeeList?.map((item) => {
     const actions = (
       <Actions
-        key={index}
         edit={() => {
           handelEdit(item);
         }}
@@ -51,6 +49,9 @@ export default function Home() {
 
     return { ...item, actions };
   });
+  useEffect(() => {
+    dispatch(getAllEmployeeAction());
+  }, []);
 
   return (
     <Layouts title="Next Crud App">
@@ -58,7 +59,7 @@ export default function Home() {
       <Box mx="auto" maxWidth="1000px">
         <DynamicTable columns={employTableColumn} rows={rows} loading={false} />
       </Box>
-      <AddEmployModal
+      <AddEditEmployModal
         open={openModal}
         setOpen={setOpenModal}
         employeeData={currentEmployeeData}
