@@ -101,12 +101,12 @@ function AddEditEmployModal(props) {
             Full Name <sup style={{ color: "red" }}>*</sup>
           </Typography>
           <TextField
-            // variant="outlined"
-            // fullWidth
-            // placeholder="Full Name"
-            // size="small"
-            // type="text"
-            // name="name"
+            variant="outlined"
+            fullWidth
+            placeholder="Full Name"
+            size="small"
+            type="text"
+            name="name"
             value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
@@ -121,12 +121,12 @@ function AddEditEmployModal(props) {
             Email <sup style={{ color: "red" }}>*</sup>
           </Typography>
           <TextField
-            // variant="outlined"
-            // fullWidth
-            // placeholder="Email"
-            // size="small"
-            // name="email"
-            // type="email"
+            variant="outlined"
+            fullWidth
+            placeholder="Email"
+            size="small"
+            name="email"
+            type="email"
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
