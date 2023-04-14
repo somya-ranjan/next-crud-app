@@ -22,7 +22,7 @@ function AddEditEmployModal(props) {
   // // Redux state
   const { isLoading } = useSelector((state) => state?.employee?.createEmployee);
   const editIsLoading = useSelector(
-    (state) => state?.employee?.editEmployeeReducer?.isLoading
+    (state) => state?.employee?.editEmployee?.isLoading
   );
 
   // // local state

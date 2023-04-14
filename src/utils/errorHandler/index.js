@@ -1,6 +1,6 @@
-import { put } from 'redux-saga/effects';
+import { put } from "redux-saga/effects";
 
-import { axios } from '../../http';
+import { axios } from "../../http";
 // import { logoutAction } from '../../store/sagaActions';
 
 export default function* errorHandler({
@@ -8,30 +8,30 @@ export default function* errorHandler({
   successHandler,
   failHandler,
   payload = {},
-  apiType = '',
-  token = '',
-  failHandlerType = '',
+  apiType = "",
+  token = "",
+  failHandlerType = "",
   sendPayload = false,
 }) {
-  if (apiType.trim() === '') {
-    throw new Error('apiType is require');
+  if (apiType.trim() === "") {
+    throw new Error("apiType is require");
   }
   try {
     let response;
-    if (token === '') {
-      if (apiType === 'get') {
+    if (token === "") {
+      if (apiType === "get") {
         response = yield axios.get(endpoint);
-      } else if (apiType === 'post') {
+      } else if (apiType === "post") {
         response = yield axios.post(endpoint, payload);
-      } else if (apiType === 'put') {
+      } else if (apiType === "put") {
         response = yield axios.put(endpoint, payload);
-      } else if (apiType === 'delete') {
+      } else if (apiType === "delete") {
         if (sendPayload) {
           response = yield axios.delete(endpoint, { data: payload });
         } else {
           response = yield axios.delete(endpoint);
         }
-      } else if (apiType === 'patch') {
+      } else if (apiType === "patch") {
         response = yield axios.patch(endpoint, payload);
       }
     } else {
@@ -41,32 +41,36 @@ export default function* errorHandler({
         },
       };
       // eslint-disable-next-line no-lonely-if
-      if (apiType === 'get') {
+      if (apiType === "get") {
         response = yield axios.get(endpoint, config);
-      } else if (apiType === 'post') {
+      } else if (apiType === "post") {
         response = yield axios.post(endpoint, payload, config);
-      } else if (apiType === 'put') {
+      } else if (apiType === "put") {
         response = yield axios.put(endpoint, payload, config);
-      } else if (apiType === 'delete') {
+      } else if (apiType === "delete") {
         response = yield axios.delete(endpoint, config);
-      } else if (apiType === 'patch') {
+      } else if (apiType === "patch") {
         response = yield axios.patch(endpoint, payload, config);
       }
     }
-    if (response && (response.status === 200 || response.status === 201) && response.data) {
+    if (
+      response &&
+      (response.status === 200 || response.status === 201) &&
+      response.data
+    ) {
       yield successHandler(response.data);
     } else if (response !== undefined && response.status !== undefined) {
       if (
         response.data.message !== undefined &&
-        response.data.message !== '' &&
-        typeof response.data.message === 'string'
+        response.data.message !== "" &&
+        typeof response.data.message === "string"
       ) {
         yield put(failHandler(response.data.message));
       } else {
-        yield put(failHandler('Server error! Please try again.'));
+        yield put(failHandler("Server error! Please try again."));
       }
     } else {
-      yield put(failHandler('Something went wrong! Please try again.'));
+      yield put(failHandler("Something went wrong! Please try again."));
     }
   } catch (error) {
     if (
@@ -75,21 +79,21 @@ export default function* errorHandler({
       error.response.status !== undefined
     ) {
       if (error.response.status === 500) {
-        if (failHandlerType === 'CUSTOM') {
+        if (failHandlerType === "CUSTOM") {
           yield failHandler(error.response.data.message);
         } else {
           yield put(failHandler(error.response.data.message));
         }
       }
       if (error.response.status === 400) {
-        if (failHandlerType === 'CUSTOM') {
+        if (failHandlerType === "CUSTOM") {
           yield failHandler(error.response.data.message);
         } else {
           yield put(failHandler(error.response.data.message));
         }
       }
       if (error.response.status === 403) {
-        if (failHandlerType === 'CUSTOM') {
+        if (failHandlerType === "CUSTOM") {
           yield failHandler(error.response.data.message);
         } else {
           yield put(failHandler(error.response.data.message));
@@ -98,38 +102,42 @@ export default function* errorHandler({
 
       if (error.response.status === 401) {
         // yield put(logoutAction({ forceLogout: true }));
-        console.log('user force logout');
+        console.log("user force logout");
       } else if (
         error.response.data &&
         error.response.data.message !== undefined &&
-        error.response.data.message !== '' &&
-        typeof error.response.data.message === 'string'
+        error.response.data.message !== "" &&
+        typeof error.response.data.message === "string"
       ) {
-        if (error.response.data && error.response.data.data && error.response.data.data.type) {
-          if (failHandlerType === 'CUSTOM') {
+        if (
+          error.response.data &&
+          error.response.data.data &&
+          error.response.data.data.type
+        ) {
+          if (failHandlerType === "CUSTOM") {
             yield failHandler(error.response.data.message);
           } else {
             yield put(
               failHandler({
                 type: error.response.data.data.type,
                 message: error.response.data.message,
-              }),
+              })
             );
           }
-        } else if (failHandlerType === 'CUSTOM') {
+        } else if (failHandlerType === "CUSTOM") {
           yield failHandler(error.response.data.message);
         } else {
           yield failHandler(error.response.data.message);
         }
-      } else if (failHandlerType === 'CUSTOM') {
-        yield failHandler('Server error! Please try again.');
+      } else if (failHandlerType === "CUSTOM") {
+        yield failHandler("Server error! Please try again.");
       } else {
-        yield put(failHandler('Server error! Please try again.'));
+        yield put(failHandler("Server error! Please try again."));
       }
-    } else if (failHandlerType === 'CUSTOM') {
-      yield failHandler('Something went wrong! Please try again.');
+    } else if (failHandlerType === "CUSTOM") {
+      yield failHandler("Something went wrong! Please try again.");
     } else {
-      yield put(failHandler('Something went wrong! Please try again.'));
+      yield put(failHandler("Something went wrong! Please try again."));
     }
   }
 }
